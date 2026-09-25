@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ScrapeFlow — Profile</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+
+    <a href="/" class="brand">
+      <span class="brand-mark">
+        <i class="fa-solid fa-layer-group"></i>
+      </span>
+      ScrapeFlow
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="nav-link">Dashboard</a>
+      <a href="/jobs" class="nav-link">Jobs</a>
+      <a href="/resume-match" class="nav-link">Resume Match</a>
+      <a href="/settings" class="nav-link">Settings</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="/profile" class="nav-link active">Profile</a>
+      <div class="avatar">SF</div>
+    </div>
+
+  </div>
+</nav>
+
+
+<main class="section">
+
+  <div class="container">
+
+    <div class="section-head">
+      <div>
+
+        <span class="eyebrow-chip">
+          <span class="dot"></span>
+          Account
+        </span>
+
+        <h1>Profile</h1>
+
+        <p>
+          Manage your ScrapeFlow profile and resume information.
+        </p>
+
+      </div>
+    </div>
+
+
+    <div class="table-card" style="padding:40px;">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:25px;
+        margin-bottom:35px;
+      ">
+
+        <div class="avatar"
+             style="
+               width:80px;
+               height:80px;
+               font-size:26px;
+             ">
+          SF
+        </div>
+
+        <div>
+
+          <h2 style="margin:0;">
+            ScrapeFlow User
+          </h2>
+
+          <p style="margin:6px 0 0;">
+            Job Intelligence Profile
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div style="display:grid; gap:22px;">
+
+        <div>
+
+          <label style="display:block; margin-bottom:8px;">
+            Full Name
+          </label>
+
+          <div class="search-field">
+            <i class="fa-solid fa-user"></i>
+
+            <input
+              type="text"
+              id="profile-name"
+              placeholder="Enter your name">
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label style="display:block; margin-bottom:8px;">
+            Email
+          </label>
+
+          <div class="search-field">
+            <i class="fa-solid fa-envelope"></i>
+
+            <input
+              type="email"
+              id="profile-email"
+              placeholder="Enter your email">
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label style="display:block; margin-bottom:8px;">
+            Professional Role
+          </label>
+
+          <div class="search-field">
+            <i class="fa-solid fa-code"></i>
+
+            <input
+              type="text"
+              id="profile-role"
+              placeholder="e.g. Python Developer">
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label style="display:block; margin-bottom:8px;">
+            Preferred Locations
+          </label>
+
+          <div class="search-field">
+            <i class="fa-solid fa-location-dot"></i>
+
+            <input
+              type="text"
+              id="profile-location"
+              placeholder="e.g. Bengaluru, Pune, Hyderabad">
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div style="
+        display:flex;
+        justify-content:flex-end;
+        margin-top:30px;
+      ">
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="saveProfile()">
+
+          <i class="fa-solid fa-floppy-disk"></i>
+          Save Profile
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="stats-grid" style="margin-top:25px;">
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          <i class="fa-solid fa-file-lines"></i>
+        </div>
+
+        <div class="stat-value">Resume</div>
+
+        <div class="stat-label">
+          Upload your resume from any job page
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+        </div>
+
+        <div class="stat-value">Job Matching</div>
+
+        <div class="stat-label">
+          Compare your profile against job requirements
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-row">
+
+    <span>&copy; 2026 ScrapeFlow. All rights reserved.</span>
+
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Support</a>
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+function saveProfile() {
+
+  localStorage.setItem(
+    "scrapeflow_profile_name",
+    document.getElementById("profile-name").value
+  );
+
+  localStorage.setItem(
+    "scrapeflow_profile_email",
+    document.getElementById("profile-email").value
+  );
+
+  localStorage.setItem(
+    "scrapeflow_profile_role",
+    document.getElementById("profile-role").value
+  );
+
+  localStorage.setItem(
+    "scrapeflow_profile_location",
+    document.getElementById("profile-location").value
+  );
+
+  alert("Profile saved successfully.");
+
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.getElementById("profile-name").value =
+    localStorage.getItem("scrapeflow_profile_name") || "";
+
+  document.getElementById("profile-email").value =
+    localStorage.getItem("scrapeflow_profile_email") || "";
+
+  document.getElementById("profile-role").value =
+    localStorage.getItem("scrapeflow_profile_role") || "";
+
+  document.getElementById("profile-location").value =
+    localStorage.getItem("scrapeflow_profile_location") || "";
+
+});
+
+</script>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+.env.local
+
+# Database
+database/jobs.db
+instance/
+*.sqlite3
+
+# Uploads and temporary test artifacts
+uploads/
+*.pdf
+*.backup
+wipro_search.html
+
+# IDE / Editor artifacts
+.vscode/
+.idea/
+
+# Keep directory structure
+!database/.gitkeep
+!tests/.gitkeep

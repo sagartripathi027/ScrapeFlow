@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ScrapeFlow — Settings</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+
+    <a href="/" class="brand">
+      <span class="brand-mark">
+        <i class="fa-solid fa-layer-group"></i>
+      </span>
+      ScrapeFlow
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="nav-link">Dashboard</a>
+      <a href="/jobs" class="nav-link">Jobs</a>
+      <a href="/resume-match" class="nav-link">Resume Match</a>
+      <a href="/settings" class="nav-link active">Settings</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="/profile" class="nav-link">Profile</a>
+      <div class="avatar">SF</div>
+    </div>
+
+  </div>
+</nav>
+
+
+<main class="section">
+
+  <div class="container">
+
+    <div class="section-head">
+      <div>
+        <span class="eyebrow-chip">
+          <span class="dot"></span>
+          Preferences
+        </span>
+
+        <h1>Settings</h1>
+
+        <p>
+          Manage your ScrapeFlow preferences and application settings.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="table-card" style="padding:32px; margin-bottom:24px;">
+
+      <h2>
+        <i class="fa-solid fa-sliders"></i>
+        Job Preferences
+      </h2>
+
+      <p style="margin-bottom:25px;">
+        Configure the type of jobs you want to focus on.
+      </p>
+
+
+      <div style="display:grid; gap:20px;">
+
+        <div class="search-field">
+          <i class="fa-solid fa-location-dot"></i>
+
+          <input
+            type="text"
+            id="preferred-location"
+            placeholder="Preferred location e.g. Bengaluru, Pune">
+        </div>
+
+
+        <div class="search-field">
+          <i class="fa-solid fa-briefcase"></i>
+
+          <input
+            type="text"
+            id="preferred-job-type"
+            placeholder="Preferred job type e.g. Full-time">
+        </div>
+
+
+        <div class="search-field">
+          <i class="fa-solid fa-code"></i>
+
+          <input
+            type="text"
+            id="preferred-skills"
+            placeholder="Skills e.g. Python, SQL, Flask">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-card" style="padding:32px; margin-bottom:24px;">
+
+      <h2>
+        <i class="fa-solid fa-bell"></i>
+        Notifications
+      </h2>
+
+      <p style="margin-bottom:25px;">
+        Control how ScrapeFlow keeps you informed.
+      </p>
+
+
+      <label style="display:flex; align-items:center; gap:14px; margin:20px 0; cursor:pointer;">
+        <input type="checkbox" checked>
+        <span>New jobs discovered</span>
+      </label>
+
+
+      <label style="display:flex; align-items:center; gap:14px; margin:20px 0; cursor:pointer;">
+        <input type="checkbox" checked>
+        <span>Resume match completed</span>
+      </label>
+
+
+      <label style="display:flex; align-items:center; gap:14px; margin:20px 0; cursor:pointer;">
+        <input type="checkbox">
+        <span>Weekly job summary</span>
+      </label>
+
+    </div>
+
+
+    <div style="display:flex; justify-content:flex-end; gap:12px;">
+
+      <a href="/" class="btn btn-secondary">
+        Cancel
+      </a>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        onclick="saveSettings()">
+
+        <i class="fa-solid fa-check"></i>
+        Save Settings
+
+      </button>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer class="site-footer">
+  <div class="container footer-row">
+
+    <span>&copy; 2026 ScrapeFlow. All rights reserved.</span>
+
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Support</a>
+    </div>
+
+  </div>
+</footer>
+
+
+<script>
+
+function saveSettings() {
+
+  localStorage.setItem(
+    "scrapeflow_location",
+    document.getElementById("preferred-location").value
+  );
+
+  localStorage.setItem(
+    "scrapeflow_job_type",
+    document.getElementById("preferred-job-type").value
+  );
+
+  localStorage.setItem(
+    "scrapeflow_skills",
+    document.getElementById("preferred-skills").value
+  );
+
+  alert("Settings saved successfully.");
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.getElementById("preferred-location").value =
+    localStorage.getItem("scrapeflow_location") || "";
+
+  document.getElementById("preferred-job-type").value =
+    localStorage.getItem("scrapeflow_job_type") || "";
+
+  document.getElementById("preferred-skills").value =
+    localStorage.getItem("scrapeflow_skills") || "";
+
+});
+
+</script>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>

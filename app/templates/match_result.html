@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Resume Match Analysis — ScrapeFlow</title>
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+  <div class="navbar-inner">
+
+    <a href="/" class="brand">
+
+      <span class="brand-mark">
+        <i class="fa-solid fa-layer-group"></i>
+      </span>
+
+      ScrapeFlow
+
+    </a>
+
+
+    <div class="nav-links">
+
+      <a href="/" class="nav-link">
+        Dashboard
+      </a>
+
+      <a href="/jobs" class="nav-link">
+        Jobs
+      </a>
+
+      <a href="/resume-match" class="nav-link active">
+        Resume Match
+      </a>
+
+      <a href="/settings" class="nav-link">
+        Settings
+      </a>
+
+    </div>
+
+
+    <div class="nav-right">
+
+      <a href="/profile" class="nav-link">
+        Profile
+      </a>
+
+      <div class="avatar">
+        SF
+      </div>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+<!-- =========================
+     MATCH RESULT
+========================= -->
+
+<div
+  class="container"
+  id="match-result-root"
+  data-match-id="{{ match_id or '' }}"
+  style="padding-bottom:64px;"
+>
+
+  <div class="match-header">
+
+    <h1>
+      Resume Match Analysis
+    </h1>
+
+    <p class="lede">
+      Here's how your resume compares against this role's requirements.
+    </p>
+
+
+    <div class="match-job-chip">
+
+      <div
+        class="company-logo"
+        id="match-company-initial">
+        ?
+      </div>
+
+      <div>
+
+        <strong id="match-job-title">
+          Loading match…
+        </strong>
+
+        <span style="color:var(--text-tertiary);">
+
+          ·
+
+          <span id="match-company">
+          </span>
+
+          ·
+
+          <span id="match-location">
+          </span>
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       SCORE
+  ========================= -->
+
+  <div class="score-panel">
+
+    <div class="score-ring-wrap">
+
+      <svg viewBox="0 0 200 200">
+
+        <defs>
+
+          <linearGradient
+            id="scoreGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%">
+
+            <stop
+              offset="0%"
+              stop-color="#5B8CFF"/>
+
+            <stop
+              offset="100%"
+              stop-color="#B07BFF"/>
+
+          </linearGradient>
+
+        </defs>
+
+
+        <circle
+          class="score-ring-bg"
+          cx="100"
+          cy="100"
+          r="90">
+        </circle>
+
+
+        <circle
+          class="score-ring-fill"
+          id="score-ring-fill"
+          cx="100"
+          cy="100"
+          r="90">
+        </circle>
+
+      </svg>
+
+
+      <div class="score-ring-center">
+
+        <div class="score-number">
+
+          <span id="score-number-value">
+            0
+          </span>
+
+          <span>
+            %
+          </span>
+
+        </div>
+
+        <div class="score-tagline">
+          Overall Match
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="score-side">
+
+      <span
+        class="score-label-chip"
+        id="score-label">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        Good Match
+
+      </span>
+
+
+      <h2>
+        How you stack up
+      </h2>
+
+
+      <p id="score-summary">
+
+        Calculating how well your resume aligns
+        with this role's requirements…
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MATCH GRID
+  ========================= -->
+
+  <div class="match-grid">
+
+
+    <!-- MATCHING SKILLS -->
+
+    <div class="match-panel">
+
+      <h3>
+
+        <i class="fa-solid fa-check text-success"></i>
+
+        Matching Skills
+
+      </h3>
+
+      <div
+        class="badge-row"
+        id="matching-skills">
+      </div>
+
+    </div>
+
+
+    <!-- MISSING SKILLS -->
+
+    <div class="match-panel">
+
+      <h3>
+
+        <i class="fa-solid fa-xmark"></i>
+
+        Missing Skills
+
+      </h3>
+
+      <div
+        class="badge-row"
+        id="missing-skills">
+      </div>
+
+    </div>
+
+
+    <!-- RELATED SKILLS -->
+
+    <div
+      class="match-panel"
+      id="related-skills-panel"
+      style="grid-column: 1 / -1; display: none;">
+
+      <h3>
+
+        <i class="fa-solid fa-link" style="color:var(--accent-blue, #5b8cff);"></i>
+
+        Related Skills
+
+      </h3>
+
+      <div
+        class="badge-row"
+        id="related-skills">
+      </div>
+
+    </div>
+
+
+    <!-- EXPERIENCE -->
+
+    <div class="match-panel">
+
+      <h3>
+
+        <i class="fa-solid fa-briefcase"></i>
+
+        Experience Match
+
+      </h3>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Required experience
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="exp-required">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Your experience
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="exp-resume">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Status
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="exp-status">
+          —
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- EDUCATION -->
+
+    <div class="match-panel">
+
+      <h3>
+
+        <i class="fa-solid fa-graduation-cap"></i>
+
+        Education
+
+      </h3>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Required education
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="edu-required">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Your education
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="edu-resume">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="compare-row">
+
+        <span class="compare-row-label">
+          Status
+        </span>
+
+        <span
+          class="compare-row-value"
+          id="edu-status">
+          —
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MATCH BREAKDOWN
+  ========================= -->
+
+  <div
+    class="match-panel"
+    style="margin-bottom:20px;">
+
+    <h3>
+
+      <i class="fa-solid fa-chart-simple"></i>
+
+      Match Breakdown
+
+    </h3>
+
+
+    <div class="breakdown-item">
+
+      <div class="breakdown-top">
+
+        <span>
+          Skills Match
+        </span>
+
+        <span id="val-skills">
+          0%
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+
+        <div
+          class="progress-fill"
+          id="bar-skills">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="breakdown-item">
+
+      <div class="breakdown-top">
+
+        <span>
+          Experience Match
+        </span>
+
+        <span id="val-experience">
+          0%
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+
+        <div
+          class="progress-fill"
+          id="bar-experience">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="breakdown-item">
+
+      <div class="breakdown-top">
+
+        <span>
+          Education Match
+        </span>
+
+        <span id="val-education">
+          0%
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+
+        <div
+          class="progress-fill"
+          id="bar-education">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="breakdown-item">
+
+      <div class="breakdown-top">
+
+        <span>
+          Projects Relevance
+        </span>
+
+        <span id="val-projects">
+          0%
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+
+        <div
+          class="progress-fill"
+          id="bar-projects">
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       RECOMMENDATION
+  ========================= -->
+
+  <div class="recommendation-panel">
+
+    <div class="recommendation-icon">
+
+      <i class="fa-solid fa-lightbulb"></i>
+
+    </div>
+
+
+    <div>
+
+      <h4>
+        Recommendation
+      </h4>
+
+      <p id="recommendation-text">
+
+        Generating a recommendation
+        based on your match…
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       ACTIONS
+  ========================= -->
+
+  <div class="match-actions">
+
+    <a
+      href="/jobs"
+      class="btn btn-secondary">
+
+      <i class="fa-solid fa-arrow-left"></i>
+
+      View Jobs
+
+    </a>
+
+
+    <a
+      href="/jobs"
+      class="btn btn-primary">
+
+      <i class="fa-solid fa-arrows-rotate"></i>
+
+      Analyze Another Job
+
+    </a>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="site-footer">
+
+  <div class="container footer-row">
+
+    <span>
+      &copy; 2026 ScrapeFlow. All rights reserved.
+    </span>
+
+
+    <div class="footer-links">
+
+      <a href="#">
+        Privacy
+      </a>
+
+      <a href="#">
+        Terms
+      </a>
+
+      <a href="#">
+        Support
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>
